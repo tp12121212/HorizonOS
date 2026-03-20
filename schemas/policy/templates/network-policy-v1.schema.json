@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://horizonos.dev/schemas/policy/templates/network-policy-v1.schema.json",
+  "title": "Horizon Network Policy Template v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["allow_user_vpn_disconnect", "allowed_wifi_ssids", "schema_version"],
+  "properties": {
+    "allow_user_vpn_disconnect": {
+      "type": "boolean"
+    },
+    "allowed_wifi_ssids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    }
+  }
+}

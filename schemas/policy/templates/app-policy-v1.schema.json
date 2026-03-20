@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://horizonos.dev/schemas/policy/templates/app-policy-v1.schema.json",
+  "title": "Horizon App Policy Template v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["allowed_install_sources", "auto_install_pwas", "schema_version"],
+  "properties": {
+    "allowed_install_sources": {
+      "type": "array",
+      "items": {
+        "enum": ["consumer_store", "enterprise_catalog", "managed_pwa", "oci_signed"]
+      },
+      "uniqueItems": true
+    },
+    "auto_install_pwas": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      },
+      "uniqueItems": true
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    }
+  }
+}

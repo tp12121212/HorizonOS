@@ -1,0 +1,23 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.horizon.Identity1">
+    <method name="GetStatus">
+      <arg name="status_json" type="s" direction="out"/>
+    </method>
+    <method name="ListAccounts">
+      <arg name="accounts_json" type="s" direction="out"/>
+    </method>
+    <method name="StartInteractiveSignIn">
+      <arg name="request_json" type="s" direction="in"/>
+      <arg name="result_json" type="s" direction="out"/>
+    </method>
+    <method name="SignOut">
+      <arg name="account_id" type="s" direction="in"/>
+      <arg name="result_json" type="s" direction="out"/>
+    </method>
+    <signal name="IdentityChanged">
+      <arg name="event_json" type="s"/>
+    </signal>
+  </interface>
+</node>

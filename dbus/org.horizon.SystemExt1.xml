@@ -1,0 +1,13 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.horizon.SystemExt1">
+    <method name="DispatchBridgeCall">
+      <arg name="request_json" type="s" direction="in"/>
+      <arg name="response_json" type="s" direction="out"/>
+    </method>
+    <method name="GetBridgeMetadata">
+      <arg name="metadata_json" type="s" direction="out"/>
+    </method>
+  </interface>
+</node>

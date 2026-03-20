@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://horizonos.dev/schemas/policy/policy-bundle-v1.schema.json",
+  "title": "Horizon Policy Bundle v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "bundle_id",
+    "generated_by",
+    "policies",
+    "schema_version",
+    "signature",
+    "tenant_id"
+  ],
+  "properties": {
+    "bundle_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "policies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["policy_id", "scope", "template", "value"],
+        "properties": {
+          "policy_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "enum": ["device", "user"]
+          },
+          "template": {
+            "type": "string",
+            "minLength": 1
+          },
+          "value": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "key_id", "signature_b64"],
+      "properties": {
+        "algorithm": {
+          "type": "string",
+          "minLength": 1
+        },
+        "key_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signature_b64": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "tenant_id": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
