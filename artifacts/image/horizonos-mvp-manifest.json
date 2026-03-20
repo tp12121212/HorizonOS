@@ -1,0 +1,249 @@
+{
+  "architectures": [
+    "x86-64"
+  ],
+  "boot_chain": [
+    "uefi-secure-boot",
+    "signed-shim",
+    "signed-bootloader",
+    "signed-uki",
+    "dm-verity-rootfs",
+    "tpm-sealed-luks2-var",
+    "tpm-sealed-luks2-home"
+  ],
+  "bridge_contract": {
+    "namespaces": {
+      "apps": [
+        "installPwa(manifest_url: string)",
+        "installedPwas()",
+        "uninstallPwa(app_id: string)"
+      ],
+      "identity": [
+        "accounts()",
+        "signIn(interactive_allowed: boolean)",
+        "signOut(account_id: string)",
+        "status()"
+      ],
+      "network": [
+        "availableNetworks()",
+        "connect(network_id: string, credential_ref?: string)",
+        "disconnectVpn(vpn_id: string)",
+        "status()"
+      ],
+      "notifications": [
+        "dismiss(notification_id: string)",
+        "list()"
+      ],
+      "policy": [
+        "activePolicy()",
+        "complianceState()"
+      ],
+      "print": [
+        "printers()",
+        "submit(job_ref: string)"
+      ],
+      "storage": [
+        "requestFileAccessToken(purpose: string, scope: string)",
+        "syncStatus(provider: string)",
+        "volumes()"
+      ],
+      "system": [
+        "battery()",
+        "deviceInfo()",
+        "setBrightness(percent: integer)",
+        "setVolume(percent: integer)"
+      ],
+      "update": [
+        "scheduleReboot(window_id?: string, deadline_epoch_ms?: integer)",
+        "state()"
+      ]
+    },
+    "path": "docs/contracts/horizon-system-bridge-v1.md"
+  },
+  "build_system": "yocto",
+  "core_daemons": [
+    "horizon-crypto",
+    "horizon-identity",
+    "horizon-mdm-agent",
+    "horizon-network",
+    "horizon-policy",
+    "horizon-print",
+    "horizon-storage",
+    "horizon-systemext",
+    "horizon-update"
+  ],
+  "dbus_interfaces": [
+    {
+      "interface": "org.horizon.Identity1",
+      "methods": [
+        {
+          "in_args": [],
+          "name": "GetStatus",
+          "out_args": [
+            "status_json"
+          ]
+        },
+        {
+          "in_args": [],
+          "name": "ListAccounts",
+          "out_args": [
+            "accounts_json"
+          ]
+        },
+        {
+          "in_args": [
+            "account_id"
+          ],
+          "name": "SignOut",
+          "out_args": [
+            "result_json"
+          ]
+        },
+        {
+          "in_args": [
+            "request_json"
+          ],
+          "name": "StartInteractiveSignIn",
+          "out_args": [
+            "result_json"
+          ]
+        }
+      ],
+      "signals": [
+        {
+          "args": [
+            "event_json"
+          ],
+          "name": "IdentityChanged"
+        }
+      ],
+      "source": "dbus/org.horizon.Identity1.xml"
+    },
+    {
+      "interface": "org.horizon.Policy1",
+      "methods": [
+        {
+          "in_args": [],
+          "name": "GetComplianceState",
+          "out_args": [
+            "state_json"
+          ]
+        },
+        {
+          "in_args": [],
+          "name": "GetEffectivePolicy",
+          "out_args": [
+            "policy_json"
+          ]
+        },
+        {
+          "in_args": [
+            "request_json"
+          ],
+          "name": "RefreshFromSource",
+          "out_args": [
+            "result_json"
+          ]
+        }
+      ],
+      "signals": [
+        {
+          "args": [
+            "event_json"
+          ],
+          "name": "PolicyChanged"
+        }
+      ],
+      "source": "dbus/org.horizon.Policy1.xml"
+    },
+    {
+      "interface": "org.horizon.SystemExt1",
+      "methods": [
+        {
+          "in_args": [
+            "request_json"
+          ],
+          "name": "DispatchBridgeCall",
+          "out_args": [
+            "response_json"
+          ]
+        },
+        {
+          "in_args": [],
+          "name": "GetBridgeMetadata",
+          "out_args": [
+            "metadata_json"
+          ]
+        }
+      ],
+      "signals": [],
+      "source": "dbus/org.horizon.SystemExt1.xml"
+    },
+    {
+      "interface": "org.horizon.Update1",
+      "methods": [
+        {
+          "in_args": [],
+          "name": "GetState",
+          "out_args": [
+            "state_json"
+          ]
+        },
+        {
+          "in_args": [
+            "request_json"
+          ],
+          "name": "ScheduleReboot",
+          "out_args": [
+            "result_json"
+          ]
+        },
+        {
+          "in_args": [
+            "request_json"
+          ],
+          "name": "StageUpdate",
+          "out_args": [
+            "result_json"
+          ]
+        }
+      ],
+      "signals": [
+        {
+          "args": [
+            "event_json"
+          ],
+          "name": "UpdateStateChanged"
+        }
+      ],
+      "source": "dbus/org.horizon.Update1.xml"
+    }
+  ],
+  "filesystem_layout": {
+    "/": "read-only squashfs with dm-verity",
+    "/etc": "overlay from /var/etc",
+    "/home": "luks2 encrypted and tpm sealed",
+    "/run": "tmpfs",
+    "/tmp": "tmpfs",
+    "/var": "luks2 encrypted and tpm sealed"
+  },
+  "m365_catalog": [
+    "https://outlook.office.com/mail/",
+    "https://teams.microsoft.com/",
+    "https://www.microsoft365.com/launch/word",
+    "https://www.microsoft365.com/launch/excel",
+    "https://www.microsoft365.com/launch/powerpoint",
+    "https://www.office.com/launch/onedrive"
+  ],
+  "partition_layout": [
+    "efi-system",
+    "recovery",
+    "os-a",
+    "os-b",
+    "var",
+    "home"
+  ],
+  "product": "HorizonOS",
+  "release_channel": "MVP",
+  "schema_version": "1.0.0"
+}
