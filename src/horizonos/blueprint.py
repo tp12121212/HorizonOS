@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SCHEMA_DIR = ROOT / "schemas" / "policy"
 DBUS_DIR = ROOT / "dbus"
 CONTRACT_PATH = ROOT / "docs" / "contracts" / "horizon-system-bridge-v1.md"
+YOCTO_LOCAL_CONF_SAMPLE = ROOT / "build" / "yocto" / "conf" / "local.conf.sample"
 
 
 BOOT_CHAIN = (
@@ -43,17 +44,71 @@ PWA_CATALOG = (
     "https://www.office.com/launch/onedrive",
 )
 
+UPDATE_CHANNELS = (
+    {
+        "name": "Dev",
+        "promotion_from": None,
+        "audience": "engineering-validation",
+        "auto_reboot_window_required": False,
+        "policy_template": "update-policy-v1",
+        "signing_profile": "dev-ed25519",
+        "rollout": {"mode": "manual-approval", "max_parallel_devices": 50},
+    },
+    {
+        "name": "Beta",
+        "promotion_from": "Dev",
+        "audience": "pre-production-pilot",
+        "auto_reboot_window_required": True,
+        "policy_template": "update-policy-v1",
+        "signing_profile": "beta-ed25519",
+        "rollout": {"mode": "staged-percentage", "percentage": 10},
+    },
+    {
+        "name": "Stable",
+        "promotion_from": "Beta",
+        "audience": "broad-production",
+        "auto_reboot_window_required": True,
+        "policy_template": "update-policy-v1",
+        "signing_profile": "stable-ed25519",
+        "rollout": {"mode": "staged-percentage", "percentage": 25},
+    },
+    {
+        "name": "Enterprise-LTS",
+        "promotion_from": "Stable",
+        "audience": "regulated-production",
+        "auto_reboot_window_required": True,
+        "policy_template": "update-policy-v1",
+        "signing_profile": "enterprise-lts-ed25519",
+        "rollout": {"mode": "manual-approval", "max_parallel_devices": 10},
+    },
+)
+
+RELEASE_VALIDATIONS = (
+    "yocto-build-reproducibility",
+    "uki-signature-verification",
+    "dm-verity-root-hash-verification",
+    "ab-slot-health-check",
+    "policy-bundle-schema-validation",
+    "systemext-contract-drift-check",
+)
+
 
 @dataclass(frozen=True)
 class BuildArtifacts:
     image_manifest: dict[str, Any]
     default_policy_bundle: dict[str, Any]
     systemext_metadata: dict[str, Any]
+    release_manifest: dict[str, Any]
 
 
 def _load_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def _load_yocto_local_conf() -> list[str]:
+    with YOCTO_LOCAL_CONF_SAMPLE.open("r", encoding="utf-8") as handle:
+        return [line.strip() for line in handle if line.strip() and not line.lstrip().startswith("#")]
 
 
 def _parse_dbus_interfaces() -> list[dict[str, Any]]:
@@ -231,11 +286,47 @@ def _build_systemext_metadata() -> dict[str, Any]:
     }
 
 
+def _build_release_manifest() -> dict[str, Any]:
+    return {
+        "schema_version": "1.0.0",
+        "product": "HorizonOS",
+        "build_system": {
+            "name": "yocto",
+            "local_conf_sample": YOCTO_LOCAL_CONF_SAMPLE.relative_to(ROOT).as_posix(),
+            "pinned_settings": _load_yocto_local_conf(),
+        },
+        "image_model": {
+            "architecture": "x86-64",
+            "format": "full-image-ota",
+            "slot_strategy": ["os-a", "os-b"],
+            "recovery_partition": True,
+            "verified_boot": list(BOOT_CHAIN),
+        },
+        "release_channels": list(UPDATE_CHANNELS),
+        "required_validations": list(RELEASE_VALIDATIONS),
+        "publish_requirements": {
+            "artifact_extensions": [".otaimg", ".uki", ".verity", ".manifest.json"],
+            "immutable_metadata_fields": [
+                "build_system.name",
+                "image_model.slot_strategy",
+                "release_channels[*].name",
+                "schema_version",
+            ],
+            "signing": {
+                "bundle_manifest": "required",
+                "uki": "required",
+                "ota_payload": "required",
+            },
+        },
+    }
+
+
 def generate_build_artifacts() -> BuildArtifacts:
     return BuildArtifacts(
         image_manifest=_build_image_manifest(),
         default_policy_bundle=_build_default_policy_bundle(),
         systemext_metadata=_build_systemext_metadata(),
+        release_manifest=_build_release_manifest(),
     )
 
 
@@ -246,6 +337,7 @@ def write_build_artifacts(output_dir: Path) -> list[Path]:
         output_dir / "image" / "horizonos-mvp-manifest.json": artifacts.image_manifest,
         output_dir / "policy" / "default-policy-bundle.json": artifacts.default_policy_bundle,
         output_dir / "runtime" / "systemext-metadata.json": artifacts.systemext_metadata,
+        output_dir / "release" / "release-manifest.json": artifacts.release_manifest,
     }
     written: list[Path] = []
     for path, payload in targets.items():

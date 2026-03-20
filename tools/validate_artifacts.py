@@ -48,6 +48,7 @@ def validate_generated_artifacts() -> list[str]:
         ARTIFACTS_DIR / "image" / "horizonos-mvp-manifest.json": expected.image_manifest,
         ARTIFACTS_DIR / "policy" / "default-policy-bundle.json": expected.default_policy_bundle,
         ARTIFACTS_DIR / "runtime" / "systemext-metadata.json": expected.systemext_metadata,
+        ARTIFACTS_DIR / "release" / "release-manifest.json": expected.release_manifest,
     }
     for path, expected_payload in targets.items():
         if not path.exists():
