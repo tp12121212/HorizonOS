@@ -49,4 +49,8 @@ Use the repository helpers to generate deterministic build artifacts and validat
 ```bash
 python3 tools/build_horizonos.py
 python3 tools/validate_artifacts.py
+python3 tools/build_developer_iso.py
+python3 tools/verify_developer_iso.py artifacts/iso/horizonos-dev-x86_64.iso
 ```
+
+The developer ISO is a deterministic, initramfs-based bring-up image for repository validation and virtual-machine smoke testing. It boots under UEFI, emits a serial boot sentinel, and is suitable for x86-64 hypervisors such as QEMU.
