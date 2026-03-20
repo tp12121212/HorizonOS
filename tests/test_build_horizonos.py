@@ -37,6 +37,14 @@ def test_bridge_metadata_and_policy_bundle_shape() -> None:
     assert artifacts.default_policy_bundle["tenant_id"] == "TENANT_ID_PLACEHOLDER"
     assert artifacts.systemext_metadata["dbus_interface"] == "org.horizon.SystemExt1"
     assert "policy" in [item["namespace"] for item in artifacts.systemext_metadata["methods"]]
+    assert artifacts.release_manifest["build_system"]["name"] == "yocto"
+    assert [channel["name"] for channel in artifacts.release_manifest["release_channels"]] == [
+        "Dev",
+        "Beta",
+        "Stable",
+        "Enterprise-LTS",
+    ]
+    assert "yocto-build-reproducibility" in artifacts.release_manifest["required_validations"]
 
 
 def test_cli_rebuilds_repository_artifacts() -> None:
@@ -46,6 +54,7 @@ def test_cli_rebuilds_repository_artifacts() -> None:
         ROOT / "artifacts" / "image" / "horizonos-mvp-manifest.json",
         ROOT / "artifacts" / "policy" / "default-policy-bundle.json",
         ROOT / "artifacts" / "runtime" / "systemext-metadata.json",
+        ROOT / "artifacts" / "release" / "release-manifest.json",
     ):
         assert path.exists(), path
         assert path.read_text(encoding="utf-8").endswith("\n")

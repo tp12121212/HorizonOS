@@ -23,7 +23,7 @@ and a pinned Chromium runtime.
 - `dbus/` — versioned D-Bus introspection XML for daemon interfaces.
 - `tools/` — deterministic validation helpers and build-artifact generators.
 - `src/horizonos/` — deterministic Python helpers that materialize HorizonOS build artifacts from repo contracts.
-- `artifacts/` — generated image, policy, and runtime metadata outputs checked for reproducibility.
+- `artifacts/` — generated image, policy, runtime, and release metadata outputs checked for reproducibility.
 
 ## MVP scope
 
@@ -32,6 +32,7 @@ and a pinned Chromium runtime.
 3. Native daemons for identity, policy, MDM, crypto, networking, updates, storage, print, and shell bridge.
 4. Microsoft 365 PWAs, Edge for Linux, PowerShell 7+, and remote Windows apps through AVD / Windows 365 HTML5.
 5. Intune-compatible OMA-DM subset, JSON Schema policy engine, and compliance reporting.
+6. Deterministic release-channel manifest covering A/B OTA publication, signing, and promotion checks.
 
 ## Explicit limitations
 

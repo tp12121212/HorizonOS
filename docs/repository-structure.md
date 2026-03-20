@@ -10,6 +10,8 @@ This structure keeps kernel/base, compositor, embedder, daemons, contracts, sche
 │   │   └── horizonos-mvp-manifest.json
 │   ├── policy/
 │   │   └── default-policy-bundle.json
+│   ├── release/
+│   │   └── release-manifest.json
 │   └── runtime/
 │       └── systemext-metadata.json
 ├── build/
@@ -67,6 +69,6 @@ This structure keeps kernel/base, compositor, embedder, daemons, contracts, sche
 
 ## Bootstrapped implementation additions
 
-- `src/horizonos/` derives deterministic runtime, image, and policy artifacts directly from the versioned repository contracts.
+- `src/horizonos/` derives deterministic runtime, image, policy, and release artifacts directly from the versioned repository contracts.
 - `artifacts/` stores generated outputs so CI can detect drift between source contracts and materialized build inputs.
 - `build/yocto/` establishes the initial production-image scaffold mandated by ADR 0001.

@@ -1,0 +1,114 @@
+{
+  "build_system": {
+    "local_conf_sample": "build/yocto/conf/local.conf.sample",
+    "name": "yocto",
+    "pinned_settings": [
+      "MACHINE ??= \"genericx86-64\"",
+      "DISTRO ?= \"horizonos\"",
+      "PACKAGE_CLASSES ?= \"package_ipk\"",
+      "EXTRA_IMAGE_FEATURES = \"\"",
+      "USER_CLASSES ?= \"buildstats\"",
+      "PATCHRESOLVE = \"noop\"",
+      "BB_GENERATE_MIRROR_TARBALLS = \"1\"",
+      "INHERIT += \"rm_work\"",
+      "CONF_VERSION = \"2\""
+    ]
+  },
+  "image_model": {
+    "architecture": "x86-64",
+    "format": "full-image-ota",
+    "recovery_partition": true,
+    "slot_strategy": [
+      "os-a",
+      "os-b"
+    ],
+    "verified_boot": [
+      "uefi-secure-boot",
+      "signed-shim",
+      "signed-bootloader",
+      "signed-uki",
+      "dm-verity-rootfs",
+      "tpm-sealed-luks2-var",
+      "tpm-sealed-luks2-home"
+    ]
+  },
+  "product": "HorizonOS",
+  "publish_requirements": {
+    "artifact_extensions": [
+      ".otaimg",
+      ".uki",
+      ".verity",
+      ".manifest.json"
+    ],
+    "immutable_metadata_fields": [
+      "build_system.name",
+      "image_model.slot_strategy",
+      "release_channels[*].name",
+      "schema_version"
+    ],
+    "signing": {
+      "bundle_manifest": "required",
+      "ota_payload": "required",
+      "uki": "required"
+    }
+  },
+  "release_channels": [
+    {
+      "audience": "engineering-validation",
+      "auto_reboot_window_required": false,
+      "name": "Dev",
+      "policy_template": "update-policy-v1",
+      "promotion_from": null,
+      "rollout": {
+        "max_parallel_devices": 50,
+        "mode": "manual-approval"
+      },
+      "signing_profile": "dev-ed25519"
+    },
+    {
+      "audience": "pre-production-pilot",
+      "auto_reboot_window_required": true,
+      "name": "Beta",
+      "policy_template": "update-policy-v1",
+      "promotion_from": "Dev",
+      "rollout": {
+        "mode": "staged-percentage",
+        "percentage": 10
+      },
+      "signing_profile": "beta-ed25519"
+    },
+    {
+      "audience": "broad-production",
+      "auto_reboot_window_required": true,
+      "name": "Stable",
+      "policy_template": "update-policy-v1",
+      "promotion_from": "Beta",
+      "rollout": {
+        "mode": "staged-percentage",
+        "percentage": 25
+      },
+      "signing_profile": "stable-ed25519"
+    },
+    {
+      "audience": "regulated-production",
+      "auto_reboot_window_required": true,
+      "name": "Enterprise-LTS",
+      "policy_template": "update-policy-v1",
+      "promotion_from": "Stable",
+      "rollout": {
+        "max_parallel_devices": 10,
+        "mode": "manual-approval"
+      },
+      "signing_profile": "enterprise-lts-ed25519"
+    }
+  ],
+  "required_validations": [
+    "yocto-build-reproducibility",
+    "uki-signature-verification",
+    "dm-verity-root-hash-verification",
+    "ab-slot-health-check",
+    "policy-bundle-schema-validation",
+    "systemext-contract-drift-check"
+  ],
+  "schema_version": "1.0.0"
+}
