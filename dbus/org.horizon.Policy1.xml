@@ -1,0 +1,19 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.horizon.Policy1">
+    <method name="GetEffectivePolicy">
+      <arg name="policy_json" type="s" direction="out"/>
+    </method>
+    <method name="GetComplianceState">
+      <arg name="state_json" type="s" direction="out"/>
+    </method>
+    <method name="RefreshFromSource">
+      <arg name="request_json" type="s" direction="in"/>
+      <arg name="result_json" type="s" direction="out"/>
+    </method>
+    <signal name="PolicyChanged">
+      <arg name="event_json" type="s"/>
+    </signal>
+  </interface>
+</node>

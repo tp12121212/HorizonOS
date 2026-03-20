@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://horizonos.dev/schemas/policy/templates/update-policy-v1.schema.json",
+  "title": "Horizon Update Policy Template v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["allow_deferral", "ring", "schema_version"],
+  "properties": {
+    "allow_deferral": {
+      "type": "boolean"
+    },
+    "ring": {
+      "enum": ["Dev", "Beta", "Stable", "Enterprise-LTS"]
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    }
+  }
+}

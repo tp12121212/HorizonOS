@@ -1,0 +1,20 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.horizon.Update1">
+    <method name="GetState">
+      <arg name="state_json" type="s" direction="out"/>
+    </method>
+    <method name="StageUpdate">
+      <arg name="request_json" type="s" direction="in"/>
+      <arg name="result_json" type="s" direction="out"/>
+    </method>
+    <method name="ScheduleReboot">
+      <arg name="request_json" type="s" direction="in"/>
+      <arg name="result_json" type="s" direction="out"/>
+    </method>
+    <signal name="UpdateStateChanged">
+      <arg name="event_json" type="s"/>
+    </signal>
+  </interface>
+</node>
