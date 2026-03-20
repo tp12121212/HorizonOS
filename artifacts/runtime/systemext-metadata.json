@@ -1,0 +1,94 @@
+{
+  "allowlisted_daemons": [
+    "identity",
+    "network",
+    "policy",
+    "print",
+    "storage",
+    "update"
+  ],
+  "bridge_name": "HorizonSystemBridge",
+  "contract_path": "docs/contracts/horizon-system-bridge-v1.md",
+  "dbus_interface": "org.horizon.SystemExt1",
+  "methods": [
+    {
+      "namespace": "apps",
+      "operations": [
+        "installPwa(manifest_url: string)",
+        "installedPwas()",
+        "uninstallPwa(app_id: string)"
+      ]
+    },
+    {
+      "namespace": "identity",
+      "operations": [
+        "accounts()",
+        "signIn(interactive_allowed: boolean)",
+        "signOut(account_id: string)",
+        "status()"
+      ]
+    },
+    {
+      "namespace": "network",
+      "operations": [
+        "availableNetworks()",
+        "connect(network_id: string, credential_ref?: string)",
+        "disconnectVpn(vpn_id: string)",
+        "status()"
+      ]
+    },
+    {
+      "namespace": "notifications",
+      "operations": [
+        "dismiss(notification_id: string)",
+        "list()"
+      ]
+    },
+    {
+      "namespace": "policy",
+      "operations": [
+        "activePolicy()",
+        "complianceState()"
+      ]
+    },
+    {
+      "namespace": "print",
+      "operations": [
+        "printers()",
+        "submit(job_ref: string)"
+      ]
+    },
+    {
+      "namespace": "storage",
+      "operations": [
+        "requestFileAccessToken(purpose: string, scope: string)",
+        "syncStatus(provider: string)",
+        "volumes()"
+      ]
+    },
+    {
+      "namespace": "system",
+      "operations": [
+        "battery()",
+        "deviceInfo()",
+        "setBrightness(percent: integer)",
+        "setVolume(percent: integer)"
+      ]
+    },
+    {
+      "namespace": "update",
+      "operations": [
+        "scheduleReboot(window_id?: string, deadline_epoch_ms?: integer)",
+        "state()"
+      ]
+    }
+  ],
+  "schema_version": "1.0.0",
+  "security_invariants": [
+    "schema validation before dispatch",
+    "caller/session authorization check",
+    "effective-policy evaluation before action",
+    "audit event emission for accepted and denied calls",
+    "per-method rate limiting"
+  ]
+}

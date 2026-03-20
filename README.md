@@ -21,7 +21,9 @@ and a pinned Chromium runtime.
 - `docs/contracts/` — versioned interface contracts for native services and shell bridge APIs.
 - `schemas/policy/` — deterministic JSON Schema documents for Horizon policy bundles and templates.
 - `dbus/` — versioned D-Bus introspection XML for daemon interfaces.
-- `tools/` — deterministic validation helpers for schemas and contracts.
+- `tools/` — deterministic validation helpers and build-artifact generators.
+- `src/horizonos/` — deterministic Python helpers that materialize HorizonOS build artifacts from repo contracts.
+- `artifacts/` — generated image, policy, and runtime metadata outputs checked for reproducibility.
 
 ## MVP scope
 
@@ -41,8 +43,9 @@ and a pinned Chromium runtime.
 
 ## Validation
 
-Use the repository helper to validate that JSON schemas and D-Bus contracts are parseable.
+Use the repository helpers to generate deterministic build artifacts and validate that schemas, D-Bus contracts, and generated outputs remain in sync.
 
 ```bash
+python3 tools/build_horizonos.py
 python3 tools/validate_artifacts.py
 ```

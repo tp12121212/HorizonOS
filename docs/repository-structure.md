@@ -5,6 +5,18 @@ This structure keeps kernel/base, compositor, embedder, daemons, contracts, sche
 ```text
 .
 ├── README.md
+├── artifacts/
+│   ├── image/
+│   │   └── horizonos-mvp-manifest.json
+│   ├── policy/
+│   │   └── default-policy-bundle.json
+│   └── runtime/
+│       └── systemext-metadata.json
+├── build/
+│   └── yocto/
+│       ├── README.md
+│       └── conf/
+│           └── local.conf.sample
 ├── dbus/
 │   ├── org.horizon.Identity1.xml
 │   ├── org.horizon.Policy1.xml
@@ -27,7 +39,14 @@ This structure keeps kernel/base, compositor, embedder, daemons, contracts, sche
 │           ├── app-policy-v1.schema.json
 │           ├── network-policy-v1.schema.json
 │           └── update-policy-v1.schema.json
+├── src/
+│   └── horizonos/
+│       ├── __init__.py
+│       └── blueprint.py
+├── tests/
+│   └── test_build_horizonos.py
 └── tools/
+    ├── build_horizonos.py
     └── validate_artifacts.py
 ```
 
@@ -44,3 +63,10 @@ This structure keeps kernel/base, compositor, embedder, daemons, contracts, sche
 - Shell host and Chromium integration should live under `runtime/` and remain isolated from shell web code under `shell/`.
 - Yocto layers should live under `build/yocto/` once image work begins.
 - Provisioning and recovery UI assets should stay separate from daily shell code because they run under different operational constraints.
+
+
+## Bootstrapped implementation additions
+
+- `src/horizonos/` derives deterministic runtime, image, and policy artifacts directly from the versioned repository contracts.
+- `artifacts/` stores generated outputs so CI can detect drift between source contracts and materialized build inputs.
+- `build/yocto/` establishes the initial production-image scaffold mandated by ADR 0001.

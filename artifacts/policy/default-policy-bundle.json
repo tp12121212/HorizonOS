@@ -1,0 +1,57 @@
+{
+  "bundle_id": "horizonos.mvp.baseline",
+  "generated_by": "tools/build_horizonos.py",
+  "policies": [
+    {
+      "policy_id": "apps.m365-defaults",
+      "scope": "device",
+      "template": "app-policy-v1",
+      "value": {
+        "allowed_install_sources": [
+          "enterprise_catalog",
+          "managed_pwa",
+          "oci_signed"
+        ],
+        "auto_install_pwas": [
+          "https://outlook.office.com/mail/",
+          "https://teams.microsoft.com/",
+          "https://www.microsoft365.com/launch/word",
+          "https://www.microsoft365.com/launch/excel",
+          "https://www.microsoft365.com/launch/powerpoint",
+          "https://www.office.com/launch/onedrive"
+        ],
+        "schema_version": "1.0.0"
+      }
+    },
+    {
+      "policy_id": "network.enterprise-baseline",
+      "scope": "device",
+      "template": "network-policy-v1",
+      "value": {
+        "allow_user_vpn_disconnect": false,
+        "allowed_wifi_ssids": [
+          "HorizonCorp",
+          "HorizonCorp-Guest"
+        ],
+        "schema_version": "1.0.0"
+      }
+    },
+    {
+      "policy_id": "updates.enterprise-lts",
+      "scope": "device",
+      "template": "update-policy-v1",
+      "value": {
+        "allow_deferral": false,
+        "ring": "Enterprise-LTS",
+        "schema_version": "1.0.0"
+      }
+    }
+  ],
+  "schema_version": "1.0.0",
+  "signature": {
+    "algorithm": "placeholder-ed25519",
+    "key_id": "tenant-key-placeholder",
+    "signature_b64": "REPLACE_WITH_REAL_SIGNATURE"
+  },
+  "tenant_id": "TENANT_ID_PLACEHOLDER"
+}

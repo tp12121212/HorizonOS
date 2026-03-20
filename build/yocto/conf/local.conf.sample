@@ -1,0 +1,10 @@
+# HorizonOS deterministic Yocto baseline
+MACHINE ??= "genericx86-64"
+DISTRO ?= "horizonos"
+PACKAGE_CLASSES ?= "package_ipk"
+EXTRA_IMAGE_FEATURES = ""
+USER_CLASSES ?= "buildstats"
+PATCHRESOLVE = "noop"
+BB_GENERATE_MIRROR_TARBALLS = "1"
+INHERIT += "rm_work"
+CONF_VERSION = "2"
